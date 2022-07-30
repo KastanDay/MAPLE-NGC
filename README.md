@@ -1,14 +1,23 @@
-# MAPLE-NGC
-Running MAPLE code in a Nvidia NGC Singularity/Apptainer container for HPC. 
+## Docker
 
-To build: `docker build -t kastanday/ngc_tf1:mini .`
-
-To push: `docker push kastanday/ngc_tf1:mini`
-
-* `mini` -- for prod. Only necessities. 
-* `latest` -- for testing. 
+View the published images here: https://hub.docker.com/r/kastanday/maple_ngc_scratch_pip/tags
 
 
-To build singularity: `apptainer pull docker://kastanday/ngc_tf1:mini`
+```bash
+# 1. Must be x64
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+# 2. Build image
+docker build -t kastanday/maple_ngc_scratch_pip:mini .
+# 3. Run image to check installed packages work
+docker run -it kastanday/maple_minimamba /bin/bash
+```
 
-Good luck!
+## Singularity
+
+To convert docker -> singularity/apptainer: 
+
+```bash
+apptainer pull docker://kastanday/maple_ngc_scratch_pip:mini
+# WARNING: Fast internet recommended. This takes a long time and uses significant disk space.
+ ```
+ 
