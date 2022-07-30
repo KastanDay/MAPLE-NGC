@@ -19,7 +19,8 @@ To convert docker -> singularity/apptainer:
 ```bash
 apptainer pull docker://kastanday/maple_ngc_scratch_pip:mini
 # WARNING: Fast internet recommended. This takes a long time and uses significant disk space.
- ```
+```
+ Note:  Delta does NOT support building images (like in this command).
  Note: By default, only the $HOME dir is mounted in the container. You can specify flags to have other dirs mounted too. 
  
  
