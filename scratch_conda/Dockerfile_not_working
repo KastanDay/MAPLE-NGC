@@ -1,0 +1,73 @@
+# FROM continuumio/miniconda3
+FROM nvcr.io/nvidia/tensorflow:22.05-tf1-py3
+
+# 1. MUST be x64 (no 3.6 in aarch64)
+# export DOCKER_DEFAULT_PLATFORM=linux/amd64
+# 2.
+# sudo docker build -t kastanday/maple_ngc_scratch_conda .
+# 3.
+# docker run kastanday/maple_minimamba
+# Optional (interactive)
+# docker run -i -t kastanday/maple_minimamba /bin/bash
+
+LABEL name="MAPLE_ngc_tf1_singularity"
+LABEL summary="Run MAPLE inside a customized Nvidia NGC container"
+LABEL URL="https://github.com/KastanDay/MAPLE-NGC"
+LABEL maintaner="Kastan Day"
+LABEL architecture="x86_64"
+LABEL version="0.1"
+LABEL release-date="2022-07-29"
+
+WORKDIR /app
+
+# necessary for cv2 https://exerror.com/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directory/
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    build-essential \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    && apt-get clean
+
+## Miniconda
+ENV PATH="/root/miniconda3/bin:${PATH}"
+ARG PATH="/root/miniconda3/bin:${PATH}"
+ARG MINICONDA=Miniconda3-4.5.4-Linux-x86_64.sh
+ARG MINICONDA_DOWNLOAD_URL=https://repo.anaconda.com/miniconda/$MINICONDA
+RUN wget $MINICONDA_DOWNLOAD_URL
+RUN bash $MINICONDA -b \
+    && rm -f $MINICONDA
+
+RUN conda create -n MAPLE_py36 python=3.6
+
+# Create the environment:
+# RUN conda install -c conda-forge mamba && \
+# mamba create --name MAPLE_py36 python=3.6 -y
+# OLD RUN conda install -n MAPLE_py36 -c conda-forge tensorflow=1.14 gdal opencv=4.5.3 scikit-image shapely pyshp cached_property keras tifffile pyparsing cycler python-dateutil h5py=2.10.0
+
+RUN echo "conda activate MAPLE_py36" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN source activate MAPLE_py36
+
+#  tensorflow=1.14 
+# todo install gdal vs apt
+RUN conda install -c conda-forge -y opencv=4.5.3 
+RUN conda install -c conda-forge -y scikit-image shapely pyshp cached_property keras tifffile pyparsing cycler python-dateutil h5py=2.10.0
+RUN conda clean -a -y
+
+# Make RUN commands use the new environment:
+# RUN echo "conda activate MAPLE_py36" >> ~/.bashrc
+# SHELL ["/bin/bash", "--login", "-c"]
+
+# install pyclowder
+# COPY requirements.txt ./
+# RUN pip install -r requirements.txt
+
+# The code to run when container is started:
+# COPY maple_cpu.py extractor_info.json MAPLE ./
+
+# CMD python maple_cpu.py
+COPY run.py ./
+CMD python run.py
