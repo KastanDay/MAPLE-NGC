@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:22.05-tf1-py3
+FROM nvcr.io/nvidia/tensorflow:19.10-py3
 
 # 1. MUST be x64
 # export DOCKER_DEFAULT_PLATFORM=linux/amd64
