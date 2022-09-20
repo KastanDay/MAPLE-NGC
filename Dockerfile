@@ -32,9 +32,9 @@ RUN apt-get update && apt-get install -y \
 
 # these args are untested, and probably unnecessary. Try adding if problems w gdal. 
 # might need to switch ARG to ENV
-# ARG CPLUS_INCLUDE_PATH=/usr/include/gdal
-# ARG C_INCLUDE_PATH=/usr/include/gdal
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
 
 RUN /usr/bin/python -m pip install --upgrade pip
-RUN pip install gdal opencv-python==4.5.3.56 scikit-image shapely pyshp cached_property keras tifffile pyparsing cycler python-dateutil h5py==2.10.0
+RUN pip install gdal==2.2.3 opencv-python==4.5.3.56 keras==2.0.8 scikit-image shapely pyshp cached_property tifffile pyparsing cycler python-dateutil h5py==2.10.0
 
