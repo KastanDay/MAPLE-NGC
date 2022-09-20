@@ -7,9 +7,9 @@ View the published images here: https://hub.docker.com/r/kastanday/maple_ngc_scr
 # 1. Must be x64
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 # 2. Build image
-docker build -t kastanday/maple_ngc_scratch_pip:mini .
+docker build -t kastanday/ngc_tf1:latest .
 # 3. Run image to check installed packages work
-docker run -it kastanday/maple_minimamba /bin/bash
+docker run -it kastanday/ngc_tf1:latest /bin/bash
 ```
 
 ## Apptainer (formerly Singularity)
@@ -17,7 +17,7 @@ docker run -it kastanday/maple_minimamba /bin/bash
 To convert docker -> singularity/apptainer: 
 
 ```bash
-apptainer pull docker://kastanday/maple_ngc_scratch_pip:mini
+apptainer pull docker://kastanday/ngc_tf1:latest
 # WARNING: Fast internet recommended. This takes a long time and uses significant disk space.
 ```
  Note:  Delta does NOT support building images (like in this command).
