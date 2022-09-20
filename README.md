@@ -16,10 +16,21 @@ docker run -it kastanday/ngc_tf1:latest /bin/bash
 
 To convert docker -> singularity/apptainer: 
 
+First, push the Docker image to the Docker Hub. 
+
+```bash
+sudo docker push kastanday/ngc_tf1:latest
+```
+
+Then pull and convert that image to a local `.sif` apptainer/singulairty file.
+
 ```bash
 apptainer pull docker://kastanday/ngc_tf1:latest
 # WARNING: Fast internet recommended. This takes a long time and uses significant disk space.
 ```
+
+Finally, manually transfer this file to Delta. I use Globus for this. 
+
  Note:  Delta does NOT support building images (like in this command).
  Note: By default, only the $HOME dir is mounted in the container. You can specify flags to have other dirs mounted too. 
  
