@@ -2,7 +2,7 @@
 
 View the published images here: https://hub.docker.com/r/kastanday/maple_ngc_scratch_pip/tags
 
-
+### Regular docker usage
 ```bash
 # 1. Must be x64
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
@@ -10,6 +10,23 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64
 docker build -t kastanday/ngc_tf1:latest .
 # 3. Run image to check installed packages work
 docker run -it kastanday/ngc_tf1:latest /bin/bash
+```
+
+
+### Set custom Docker Cache location 
+Docs on [`docker buildx`](https://docs.docker.com/build/cache/backends/local/)
+
+```bash
+# first enable the buildx driver
+docker buildx create --use --driver=docker-container
+
+# build a container with custom platform and cache
+sudo docker buildx build \
+  --push -t kastanday/pytorch_falcon_aarch64 \
+  --platform linux/aarch64 \  # or linux/amd64
+  --cache-to type=local,dest=/mnt/teton/utils/docker_cache \
+  --cache-from type=local,src=/mnt/teton/utils/docker_cache \
+  .
 ```
 
 ## Apptainer (formerly Singularity)
@@ -29,7 +46,7 @@ apptainer pull docker://kastanday/ngc_tf1:latest
 # WARNING: Fast internet recommended. This takes a long time and uses significant disk space.
 ```
 
-Finally, manually transfer this file to Delta. I use Globus for this. 
+Finally, manually transfer this file to Delta. I use Globus for this.
 
  Note:  Delta does NOT support building images (like in this command).
  Note: By default, only the $HOME dir is mounted in the container. You can specify flags to have other dirs mounted too. 
